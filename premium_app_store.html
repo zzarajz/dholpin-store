@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium App Dolphin Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #a8e6cf 0%, #7fcdcd 25%, #81a4cd 50%, #9b8ce8 75%, #c5a3e8 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        .bg-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .star {
+            color: white;
+            font-size: 20px;
+        }
+
+        .jellyfish {
+            font-size: 30px;
+            animation: jellyfish 8s ease-in-out infinite;
+        }
+
+        .whale {
+            font-size: 40px;
+            animation: whale 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes jellyfish {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        @keyframes whale {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(20px); }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .dolphin-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .dolphin {
+            font-size: 3rem;
+            animation: dolphinSwim 3s ease-in-out infinite;
+        }
+
+        .dolphin.left {
+            animation-delay: 0s;
+        }
+
+        .dolphin.right {
+            animation-delay: 1.5s;
+        }
+
+        @keyframes dolphinSwim {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(-5deg); }
+            50% { transform: translateY(-5px) rotate(0deg); }
+            75% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #34495e;
+            opacity: 0.8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-toggle {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .admin-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .admin-content {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .admin-form {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        /* App Grid */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .app-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .app-prices {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .app-prices.active {
+            display: block;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .price-item:last-child {
+            border-bottom: none;
+        }
+
+        .price-duration {
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .price-value {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 1.1rem;
+        }
+
+        .stock-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+        }
+
+        .stock-available {
+            background: #27ae60;
+        }
+
+        .stock-unavailable {
+            background: #e74c3c;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .contact-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .admin-contacts {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .admin-contact {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+            text-decoration: none;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-contacts {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animation for background elements positioning */
+        .bg-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .bg-element:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+        .bg-element:nth-child(3) { top: 40%; left: 5%; animation-delay: 2s; }
+        .bg-element:nth-child(4) { top: 60%; right: 10%; animation-delay: 3s; }
+        .bg-element:nth-child(5) { top: 80%; left: 20%; animation-delay: 4s; }
+        .bg-element:nth-child(6) { top: 30%; right: 30%; animation-delay: 5s; }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Elements -->
+    <div class="bg-element star">✨</div>
+    <div class="bg-element star">⭐</div>
+    <div class="bg-element jellyfish">🎐</div>
+    <div class="bg-element whale">🐋</div>
+    <div class="bg-element star">💫</div>
+    <div class="bg-element jellyfish">🌊</div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="dolphin-container">
+            <div class="dolphin left">🐬</div>
+            <div>
+                <h1 class="title">PREMIUM APP DOLPHIN STORE</h1>
+                <p class="subtitle">Your Trusted Premium App Provider</p>
+            </div>
+            <div class="dolphin right">🐬</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Admin Panel -->
+        <div class="admin-panel">
+            <button class="admin-toggle" onclick="toggleAdmin()">🔧 Admin Panel</button>
+            <div class="admin-content" id="adminContent">
+                <h3 style="color: #2c3e50; margin-bottom: 1rem;">Kelola Aplikasi & Stok</h3>
+                
+                <div class="admin-form">
+                    <div class="form-group">
+                        <label>Nama Aplikasi:</label>
+                        <input type="text" id="appName" placeholder="Contoh: NETFLIX">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Harga & Durasi:</label>
+                        <textarea id="appPrices" placeholder="Contoh:&#10;1 bulan : 28000&#10;3 bulan : 75000" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Status Stok:</label>
+                        <select id="stockStatus">
+                            <option value="available">Tersedia</option>
+                            <option value="unavailable">Tidak Tersedia</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn" onclick="addApp()">Tambah Aplikasi</button>
+                        <button class="btn btn-danger" onclick="clearAll()">Reset Semua</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Apps Grid -->
+        <div class="app-grid" id="appGrid">
+            <!-- Apps will be loaded here -->
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <h2 class="contact-title">📞 Hubungi Admin</h2>
+            <div class="admin-contacts">
+                <a href="https://wa.me/085759390580" class="admin-contact" target="_blank">
+                    📱 Admin 1
+                </a>
+                <a href="https://wa.me/082243498228" class="admin-contact" target="_blank">
+                    📱 Admin 2
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initial app data from price list
+        let apps = {
+            'YOUTUBE': {
+                prices: [
+                    { duration: 'Family Plan 1 bulan', price: 4000 },
+                    { duration: 'Family Plan 2 bulan', price: 7000 },
+                    { duration: 'Individual Plan 1 bulan', price: 9000 },
+                    { duration: 'Individual Plan 3 bulan', price: 23000 },
+                    { duration: 'Mix Plan 2 bulan', price: 12000 },
+                    { duration: 'Mix Plan 3 bulan', price: 16000 },
+                    { duration: 'Mix Plan 4 bulan', price: 18000 },
+                    { duration: 'Mix Plan 6 bulan', price: 25000 }
+                ],
+                stock: 'available'
+            },
+            'CANVA': {
+                prices: [
+                    { duration: 'Member 1 bulan', price: 4500 },
+                    { duration: 'Member 1 tahun', price: 8000 },
+                    { duration: 'Edu Lifetime', price: 7000 },
+                    { duration: 'Owner 1 bulan', price: 12000 }
+                ],
+                stock: 'available'
+            },
+            'APPLE MUSIC': {
+                prices: [
+                    { duration: 'Via Invite 1 bulan', price: 5000 },
+                    { duration: 'Famhead 1 bulan', price: 11000 },
+                    { duration: 'Famhead 5 acc', price: 30000 },
+                    { duration: 'Via Giftcard 1 bulan', price: 15000 },
+                    { duration: 'Via Giftcard 2-3 bulan', price: 21000 },
+                    { duration: 'Via Immes 1 bulan', price: 6000 },
+                    { duration: 'Via Immes 2 bulan', price: 9000 },
+                    { duration: 'Via Immes 3 bulan', price: 12000 }
+                ],
+                stock: 'available'
+            },
+            'APPLE TV': {
+                prices: [
+                    { duration: '2-3 bulan', price: 15000 }
+                ],
+                stock: 'available'
+            },
+            'NETFLIX': {
+                prices: [
+                    { duration: 'Sharing 1 profil 1 user', price: 28000 },
+                    { duration: 'Sharing 1 profil 2 user', price: 20000 },
+                    { duration: 'Solo Profil 2 device', price: 34000 },
+                    { duration: 'Private 5 profil 1 bulan', price: 135000 },
+                    { duration: 'Private 5 profil 7 hari', price: 42000 }
+                ],
+                stock: 'available'
+            },
+            'PICSART': {
+                prices: [
+                    { duration: 'Sharing 1 bulan', price: 5000 },
+                    { duration: 'Private 7 hari', price: 4000 },
+                    { duration: 'Private 1 bulan', price: 8000 }
+                ],
+                stock: 'available'
+            },
+            'VIDIO': {
+                prices: [
+                    { duration: 'Sharing Platinum 1 bulan 2u', price: 16000 },
+                    { duration: 'Private Platinum 1 bulan', price: 26000 }
+                ],
+                stock: 'available'
+            },
+            'WETV': {
+                prices: [
+                    { duration: 'Sharing 1 bulan', price: 8000 },
+                    { duration: 'Private 1 bulan', price: 28000 }
+                ],
+                stock: 'available'
+            },
+            'CAPCUT': {
+                prices: [
+                    { duration: '1 bulan fullgar 3u', price: 6000 },
+                    { duration: '1 bulan fullgar private', price: 10000 },
+                    { duration: 'Private 5 acc', price: 25000 }
+                ],
+                stock: 'available'
+            },
+            'SPOTIFY': {
+                prices: [
+                    { duration: 'Famplan 1 bulan fullgar', price: 16000 },
+                    { duration: 'Famplan 1 bulan gar 10d', price: 14000 }
+                ],
+                stock: 'available'
+            },
+            'DISNEY+': {
+                prices: [
+                    { duration: 'Sharing 6u 1 bulan', price: 25000 },
+                    { duration: 'Sharing 10u 1 bulan', price: 20000 },
+                    { duration: 'Private 1 bulan', price: 140000 }
+                ],
+                stock: 'available'
+            },
+            'BSTATION': {
+                prices: [
+                    { duration: 'Sharing 1 bulan', price: 8000 },
+                    { duration: 'Sharing 3 bulan', price: 12000 },
+                    { duration: 'Sharing 1 tahun', price: 17000 }
+                ],
+                stock: 'available'
+            },
+            'ALIGHT MOTION': {
+                prices: [
+                    { duration: 'Private 1 tahun', price: 1000 }
+                ],
+                stock: 'available'
+            },
+            'CHAT GPT PLUS': {
+                prices: [
+                    { duration: 'Sharing 1 bulan', price: 20000 }
+                ],
+                stock: 'available'
+            }
+        };
+
+        // Add all other apps from the list with default "Coming Soon" status
+        const otherApps = [
+            'ALIGHT MOTION', 'APPLE NEED', 'CAMSCANNER', 'CRUNCHYROLL', 'DAZZCAM', 
+            'DRAKOR ID', 'DRAMABOX', 'DUOLINGO', 'FIZZO NOVEL', 'GAGAOLALA', 
+            'GEMINI', 'GETCONTACT', 'GRAMMARLY', 'HBO MAX', 'ICLOUD', 'IFAKE', 
+            'IFLIX', 'INSHOT', 'INSTAGRAM', 'IQIYI', 'LIGHTROOM', 'MANGO TV', 
+            'MEITU', 'NOVELTOON', 'OLDROLL', 'POLAR', 'PRIME VIDEO', 'QUILLBOT', 
+            'REEL SHORT', 'REMINI', 'SCRIBD', 'SEREAL+', 'TELEPREM', 'TIKTOK', 
+            'TIKTOK MUSIC', 'VISION+', 'VIU', 'VPN', 'VSCO', 'WATTPAD', 
+            'WIBUKU', 'WPS', 'YOUKU', 'ZOOM PRO'
+        ];
+
+        otherApps.forEach(app => {
+            if (!apps[app]) {
+                apps[app] = {
+                    prices: [{ duration: 'Coming Soon', price: 'TBA' }],
+                    stock: 'unavailable'
+                };
+            }
+        });
+
+        function renderApps() {
+            const appGrid = document.getElementById('appGrid');
+            appGrid.innerHTML = '';
+
+            Object.keys(apps).sort().forEach(appName => {
+                const app = apps[appName];
+                const appCard = document.createElement('div');
+                appCard.className = 'app-card';
+                appCard.onclick = () => togglePrices(appName);
+
+                const stockClass = app.stock === 'available' ? 'stock-available' : 'stock-unavailable';
+                
+                appCard.innerHTML = `
+                    <div class="app-name">
+                        ⸼ ࣪ 𖹭 ࣪𝃯 𓂂 ${appName} ┆
+                        <span class="stock-indicator ${stockClass}"></span>
+                    </div>
+                    <div class="app-prices" id="prices-${appName}">
+                        ${app.prices.map(price => `
+                            <div class="price-item">
+                                <span class="price-duration">${price.duration}</span>
+                                <span class="price-value">${typeof price.price === 'number' ? 'Rp ' + price.price.toLocaleString() : price.price}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                appGrid.appendChild(appCard);
+            });
+        }
+
+        function togglePrices(appName) {
+            const pricesDiv = document.getElementById(`prices-${appName}`);
+            pricesDiv.classList.toggle('active');
+        }
+
+        function toggleAdmin() {
+            const adminContent = document.getElementById('adminContent');
+            adminContent.classList.toggle('active');
+        }
+
+        function addApp() {
+            const appName = document.getElementById('appName').value.trim().toUpperCase();
+            const appPricesText = document.getElementById('appPrices').value.trim();
+            const stockStatus = document.getElementById('stockStatus').value;
+
+            if (!appName || !appPricesText) {
+                alert('Mohon isi semua field!');
+                return;
+            }
+
+            const prices = appPricesText.split('\n').map(line => {
+                const parts = line.split(':');
+                if (parts.length === 2) {
+                    const duration = parts[0].trim();
+                    const price = parseInt(parts[1].trim());
+                    return { duration, price: isNaN(price) ? parts[1].trim() : price };
+                }
+                return null;
+            }).filter(Boolean);
+
+            if (prices.length === 0) {
+                alert('Format harga tidak valid!');
+                return;
+            }
+
+            apps[appName] = {
+                prices: prices,
+                stock: stockStatus
+            };
+
+            renderApps();
+            
+            // Clear form
+            document.getElementById('appName').value = '';
+            document.getElementById('appPrices').value = '';
+            document.getElementById('stockStatus').value = 'available';
+            
+            alert(`Aplikasi ${appName} berhasil ditambahkan!`);
+        }
+
+        function clearAll() {
+            if (confirm('Apakah Anda yakin ingin menghapus semua data? Tindakan ini tidak dapat dibatalkan.')) {
+                // Reset to original data
+                apps = {};
+                renderApps();
+                alert('Semua data telah dihapus!');
+            }
+        }
+
+        // Initialize the app
+        renderApps();
+    </script>
+</body>
+</html>
